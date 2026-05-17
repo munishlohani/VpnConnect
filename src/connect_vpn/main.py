@@ -1,4 +1,4 @@
-from app import TerminalOS
+from connect_vpn.app import TerminalOS
 
 
 def main():

@@ -1,11 +1,11 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container
 import subprocess
-from config import load_config, decrypt_password
+from connect_vpn.config import load_config, decrypt_password
 from textual.widgets import RichLog
 from textual import work
-from config import StatusIndicator
+from connect_vpn.config import StatusIndicator
 
 
 
@@ -41,7 +41,7 @@ class VPNScreen(Screen):
             self._run_vpn(profile_name)
 
         if event.button.id == "back":
-            from home import Home
+            from connect_vpn.home import Home
             self.app.push_screen(Home())
 
         if event.button.id == "disconnect":

@@ -1,7 +1,7 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
 from textual.containers import Container
-from config import load_config
+from connect_vpn.config import load_config
 
 
 class Setup(Screen):
@@ -41,16 +41,16 @@ class Setup(Screen):
                 Static(f"{name} ==> {data['server']} ({data['username']})")
             )
     def auto_open_add(self):
-        from vpn.setup import AddProfile
+        from connect_vpn.vpn.setup import AddProfile
         self.app.switch_screen(AddProfile())
 
     def on_button_pressed(self, event):
         if event.button.id == "add":
-            from vpn.setup import AddProfile
+            from connect_vpn.vpn.setup import AddProfile
             self.app.push_screen(AddProfile())
 
         elif event.button.id == "back":
-            from home import Home
+            from connect_vpn.home import Home
             self.app.switch_screen(Home())
 
         elif event.button.id == "exit":

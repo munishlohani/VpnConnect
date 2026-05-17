@@ -1,8 +1,8 @@
 from textual.app import App
-from splash import Splash
-from home import Home
-from setup import Setup
-from config import load_config
+from connect_vpn.splash import Splash
+from connect_vpn.home import Home
+from connect_vpn.setup import Setup
+from connect_vpn.config import load_config
 import subprocess
 
 

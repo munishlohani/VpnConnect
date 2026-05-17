@@ -1,7 +1,7 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
 from textual.containers import Vertical
-from config import load_config, StatusIndicator
+from connect_vpn.config import load_config, StatusIndicator
 
 
 class Home(Screen):
@@ -45,20 +45,20 @@ class Home(Screen):
 
     def on_button_pressed(self,event):
         if event.button.id=="setup":
-            from setup import Setup
+            from connect_vpn.setup import Setup
             self.app.switch_screen(Setup())
 
         if event.button.id=="refresh":
-            from home import Home
+            from connect_vpn.home import Home
             self.app.switch_screen(Home())
 
         if event.button.id == "connect":
-            from vpn.connect import VPNScreen
+            from connect_vpn.vpn.connect import VPNScreen
             self.app.switch_screen(VPNScreen())
 
         if event.button.id == "disconnect":
             self.app.disconnect_vpn()
-            from home import Home
+            from connect_vpn.home import Home
             self.app.switch_screen(Home())
 
         if event.button.id == "exit":

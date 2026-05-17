@@ -1,6 +1,6 @@
 from textual.screen import Screen
 from textual.widgets import Input, Button, Static
-from config import load_config, save_config, encrypt_password
+from connect_vpn.config import load_config, save_config, encrypt_password
 
 
 class AddProfile(Screen):
@@ -53,6 +53,6 @@ class AddProfile(Screen):
 
         save_config(cfg)
 
-        from home import Home
+        from connect_vpn.home import Home
 
         self.app.push_screen(Home())
