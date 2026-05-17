@@ -1,0 +1,14 @@
+[project]
+name = "connect-vpn"
+version = "0.1.0"
+description = "A tui to connect to vpn based on Cisco anyconnect"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pyfiglet>=1.0.4",
+    "python-dotenv>=1.2.2",
+    "pyyaml>=6.0.3",
+    "textual>=8.2.6",
+    "cryptography>=41.0.0",
+    "pexpect>=4.8.0",
+]
