@@ -7,7 +7,7 @@ from textual.widgets import Static
 from cryptography.fernet import Fernet
 
 
-ROOT_DIR = "~/.connectvpn"
+ROOT_DIR = ".connectvpn"
 
 CONFIG_PATH = os.path.join(ROOT_DIR,"config.yaml")
 KEY_PATH = os.path.join(ROOT_DIR,".vault_key")
