@@ -1,14 +1,67 @@
-.splash {
-    width: 100%;
-    height: 100%;
-    align: center middle;
+Screen {
+    background: #0b1220;
+    color: #f8fafc;
 }
 
-.ascii {
+#title {
     text-align: center;
+    text-style: bold;
+    color: #7dd3fc;
+    padding-bottom: 1;
 }
 
-.profiles{
-    display: block;
+#section-title {
+    text-style: bold;
+    color: #e2e8f0;
+    padding-top: 1;
+}
+
+#status {
+    padding: 1 2;
+    border: heavy #334155;
+    border-radius: 1;
+    background: #111827;
+    color: #c7d2fe;
+    margin: 1 0;
+}
+
+#vpn_container,
+#profiles {
+    padding: 1 1;
+    border: round #334155;
+    background: #0f172a;
+    margin: 1 0;
+}
+
+#log {
+    height: 12;
+    border: round #334155;
+    background: #020617;
+    color: #cbd5e1;
+    padding: 1;
+    overflow: auto;
+    margin-top: 1;
+}
+
+Button {
+    background: #2563eb;
+    color: #ffffff;
+    border: solid #1d4ed8;
+    border-radius: 1;
+    padding: 1 2;
+    margin: 1 0;
+}
+
+Button:hover,
+Button:focus {
+    background: #3b82f6;
+}
+
+Static {
+    color: #e2e8f0;
+}
+
+#no-profiles {
+    color: #fda4af;
 }
 
