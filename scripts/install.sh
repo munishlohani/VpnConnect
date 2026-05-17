@@ -212,7 +212,7 @@ install_uv() {
 
 check_python() {
     if [ "$DISTRO" = "termux" ]; then
-        log_info "Checking Termux Python..."
+        log_info "Checking Termux Python (>= 3.11)..."
         if command -v python >/dev/null 2>&1; then
             PYTHON_PATH="$(command -v python)"
             if "$PYTHON_PATH" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' 2>/dev/null; then
@@ -230,25 +230,37 @@ check_python() {
         return 0
     fi
 
-    log_info "Checking Python $PYTHON_VERSION..."
+    log_info "Checking Python (>= 3.11)..."
 
-    # Let uv handle Python — it can download and manage Python versions
-    # First check if a suitable Python is already available
-    if PYTHON_PATH="$("$UV_CMD" python find "$PYTHON_VERSION" 2>/dev/null)"; then
-        PYTHON_FOUND_VERSION="$("$PYTHON_PATH" --version 2>/dev/null)"
-        log_success "Python found: $PYTHON_FOUND_VERSION"
-        return 0
+    # First check if any Python >= 3.11 is already available on the system
+    if command -v python3 >/dev/null 2>&1; then
+        PYTHON_PATH="$(command -v python3)"
+        if "$PYTHON_PATH" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' 2>/dev/null; then
+            PYTHON_FOUND_VERSION="$("$PYTHON_PATH" --version 2>/dev/null)"
+            log_success "Python found: $PYTHON_FOUND_VERSION"
+            return 0
+        fi
     fi
 
-    # Python not found — use uv to install it (no sudo needed!)
-    log_info "Python $PYTHON_VERSION not found, installing via uv..."
+    # Check if python (without 3) is available and meets version requirement
+    if command -v python >/dev/null 2>&1; then
+        PYTHON_PATH="$(command -v python)"
+        if "$PYTHON_PATH" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' 2>/dev/null; then
+            PYTHON_FOUND_VERSION="$("$PYTHON_PATH" --version 2>/dev/null)"
+            log_success "Python found: $PYTHON_FOUND_VERSION"
+            return 0
+        fi
+    fi
+
+    # Let uv handle Python — it can download and manage Python versions
+    log_info "Python >= 3.11 not found, installing via uv..."
     if "$UV_CMD" python install "$PYTHON_VERSION"; then
         PYTHON_PATH="$("$UV_CMD" python find "$PYTHON_VERSION")"
         PYTHON_FOUND_VERSION="$("$PYTHON_PATH" --version 2>/dev/null)"
         log_success "Python installed: $PYTHON_FOUND_VERSION"
     else
-        log_error "Failed to install Python $PYTHON_VERSION"
-        log_info "Install Python $PYTHON_VERSION manually, then re-run this script"
+        log_error "Failed to install Python"
+        log_info "Please install Python 3.11 or higher manually, then re-run this script"
         exit 1
     fi
 }
@@ -461,29 +473,37 @@ main() {
     log_info "Detected: $OS ($DISTRO)"
     echo ""
 
+    # Step 1: Check for Git
     log_step "Step 1/5: Checking Git"
     check_git
 
+    # Step 2: Install/check uv
     log_step "Step 2/5: Installing/Checking Package Manager (uv)"
     install_uv
 
+    # Step 3: Check Python
     log_step "Step 3/5: Installing/Checking Python"
     check_python
 
+    # Step 4: Clone repository
     log_step "Step 4/5: Downloading VPNConnect"
     clone_repo
 
+    # Step 5: Setup virtual environment and install dependencies
     log_step "Step 5/5: Setting Up VPNConnect"
     setup_venv
     install_deps
 
+    # Verify installation
     log_info "Verifying installation..."
     verify_installation
 
+    # Print completion banner and next steps
     print_completion_banner
     print_next_steps
 
     log_success "VPNConnect installer completed successfully!"
 }
 
+# Run main function
 main
