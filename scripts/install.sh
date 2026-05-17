@@ -37,7 +37,7 @@ BOLD='\033[1m'
 # Configs
 REPO_URL_SSH="git@github.com:munishlohani/VpnConnect.git"
 REPO_URL_HTTPS="https://github.com/munishlohani/VpnConnect.git"
-INSTALL_DIR="${HOME}/VPNConnect"
+INSTALL_DIR=""
 
 # Options
 USE_VENV=true
@@ -126,6 +126,30 @@ log_step() {
     echo -e "${BLUE}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${BLUE}${BOLD}$1${NC}"
     echo -e "${BLUE}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+}
+
+ask_install_dir() {
+    local default_dir="${HOME}/VPNConnect"
+    
+    echo ""
+    log_info "Where would you like to install VPNConnect?"
+    echo -e "  ${CYAN}Default: $default_dir${NC}"
+    
+    if [ "$IS_INTERACTIVE" = true ]; then
+        read -p "  Enter installation directory (or press Enter for default): " user_dir
+        
+        if [ -z "$user_dir" ]; then
+            INSTALL_DIR="$default_dir"
+        else
+            # Expand ~ to home directory
+            INSTALL_DIR="${user_dir/#\~/$HOME}"
+        fi
+    else
+        # Non-interactive mode, use default
+        INSTALL_DIR="$default_dir"
+    fi
+    
+    log_success "Installation directory: $INSTALL_DIR"
 }
 
 # ============================================================================
@@ -476,28 +500,32 @@ main() {
     log_info "Detected: $OS ($DISTRO)"
     echo ""
 
+    # Step 0: Ask for installation directory
+    ask_install_dir
+
     # Step 1: Check for Git
-    log_step "Step 1/5: Checking Git"
+    log_step "Step 1/6: Checking Git"
     check_git
 
     # Step 2: Install/check uv
-    log_step "Step 2/5: Installing/Checking Package Manager (uv)"
+    log_step "Step 2/6: Installing/Checking Package Manager (uv)"
     install_uv
 
     # Step 3: Check Python
-    log_step "Step 3/5: Installing/Checking Python"
+    log_step "Step 3/6: Installing/Checking Python"
     check_python
 
     # Step 4: Clone repository
-    log_step "Step 4/5: Downloading VPNConnect"
+    log_step "Step 4/6: Downloading VPNConnect"
     clone_repo
 
     # Step 5: Setup virtual environment and install dependencies
-    log_step "Step 5/5: Setting Up VPNConnect"
+    log_step "Step 5/6: Setting Up VPNConnect"
     setup_venv
     install_deps
 
-    # Verify installation
+    # Step 6: Verify installation
+    log_step "Step 6/6: Verifying Installation"
     log_info "Verifying installation..."
     verify_installation
 
