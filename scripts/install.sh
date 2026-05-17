@@ -413,11 +413,12 @@ setup_venv() {
         # Termux doesn't have uv, use python -m venv
         "$PYTHON_PATH" -m venv .venv
     else
-        # Use uv venv with the Python we found
+        # Use uv venv with the Python we found - use 'uv' directly as fallback
+        local uv_cmd="${UV_CMD:-uv}"
         if [ -n "$PYTHON_PATH" ]; then
-            $UV_CMD venv .venv --python "$PYTHON_PATH"
+            $uv_cmd venv .venv --python "$PYTHON_PATH"
         else
-            $UV_CMD venv .venv
+            $uv_cmd venv .venv
         fi
     fi
 
@@ -433,8 +434,9 @@ install_deps() {
         pip install -e . >/dev/null 2>&1
         deactivate
     else
-        # Use uv tool install
-        $UV_CMD tool install .
+        # Use uv tool install - use 'uv' directly as fallback if UV_CMD is empty
+        local uv_cmd="${UV_CMD:-uv}"
+        $uv_cmd tool install .
     fi
 
     log_success "Dependencies installed"
