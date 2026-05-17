@@ -413,8 +413,12 @@ setup_venv() {
         # Termux doesn't have uv, use python -m venv
         "$PYTHON_PATH" -m venv .venv
     else
-        # Use uv venv for all other systems
-        $UV_CMD venv .venv
+        # Use uv venv with the Python we found
+        if [ -n "$PYTHON_PATH" ]; then
+            $UV_CMD venv .venv --python "$PYTHON_PATH"
+        else
+            $UV_CMD venv .venv
+        fi
     fi
 
     log_success "Virtual environment created"
