@@ -233,6 +233,7 @@ check_python() {
     log_info "Checking Python (>= 3.11)..."
 
     # First check if any Python >= 3.11 is already available on the system
+    # Try python3 first (most common)
     if command -v python3 >/dev/null 2>&1; then
         PYTHON_PATH="$(command -v python3)"
         if "$PYTHON_PATH" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' 2>/dev/null; then
@@ -252,9 +253,19 @@ check_python() {
         fi
     fi
 
+    # Try python3.11, python3.12, python3.13, etc. (common on macOS with brew)
+    for py_version in python3.13 python3.12 python3.11; do
+        if command -v "$py_version" >/dev/null 2>&1; then
+            PYTHON_PATH="$(command -v $py_version)"
+            PYTHON_FOUND_VERSION="$("$PYTHON_PATH" --version 2>/dev/null)"
+            log_success "Python found: $PYTHON_FOUND_VERSION"
+            return 0
+        fi
+    done
+
     # Let uv handle Python — it can download and manage Python versions
     log_info "Python >= 3.11 not found, installing via uv..."
-    if "$UV_CMD" python install "$PYTHON_VERSION"; then
+    if "$UV_CMD" python install "$PYTHON_VERSION" 2>&1 | grep -v "^Downloading\|^Installing" | head -20; then
         PYTHON_PATH="$("$UV_CMD" python find "$PYTHON_VERSION")"
         PYTHON_FOUND_VERSION="$("$PYTHON_PATH" --version 2>/dev/null)"
         log_success "Python installed: $PYTHON_FOUND_VERSION"
