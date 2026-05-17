@@ -41,7 +41,7 @@ class Home(Screen):
             yield Static("No profiles found")
         else:
             for name, data in profiles.items():
-                yield Static(f"{name} → {data['server']}")
+                yield Static(f"{name} → {data['server']} ({data['username']})")
 
     def on_button_pressed(self,event):
         if event.button.id=="setup":
@@ -57,6 +57,7 @@ class Home(Screen):
             self.app.switch_screen(VPNScreen())
 
         if event.button.id == "disconnect":
+            
             self.app.disconnect_vpn()
             from connect_vpn.home import Home
             self.app.switch_screen(Home())

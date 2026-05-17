@@ -8,11 +8,12 @@ class AddProfile(Screen):
     def compose(self):
         yield Button("X", id="exit", classes="exit-button")
         yield Input(placeholder="Profile name", id="name")
-        yield Input(placeholder="Server", id="server")
+        yield Input(placeholder="Server (VPN portal)", id="server")
         yield Input(placeholder="Username", id="username")
-        yield Input(placeholder="Group", id="group", type="number")
+        yield Input(placeholder="Group (Enter a number, def: 1)", id="group", type="number")
         yield Input(placeholder="Password", id="password",password=True)
-        yield Input(placeholder="Passcode Method", id="passcode")
+        yield Input(placeholder="Passcode Method (Duo) def: 1", id="passcode")
+        yield Input(placeholder="Accept (Optional) def: 'y'", id="accept")
 
         yield Button("Save", id="save")
         yield Static("", id="error")
@@ -33,6 +34,7 @@ class AddProfile(Screen):
         group = self.query_one("#group").value or 1
         password = self.query_one("#password").value
         passcode=self.query_one("#passcode").value or 1
+        accept=self.query_one("#accept").value or 'y'
 
 
         if not name or not server or not username:
@@ -43,7 +45,8 @@ class AddProfile(Screen):
             "server": server,
             "username": username,
             "group": group,
-            "passcode":passcode
+            "passcode":passcode,
+            "accept": accept
         }
 
         if password:

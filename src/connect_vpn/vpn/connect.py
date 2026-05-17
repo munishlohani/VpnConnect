@@ -1,6 +1,6 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
-from textual.containers import Container
+from textual.containers import Container,VerticalScroll
 import subprocess
 from connect_vpn.config import load_config, decrypt_password
 from textual.widgets import RichLog
@@ -25,7 +25,7 @@ class VPNScreen(Screen):
     
         yield StatusIndicator(self.app.vpn_status, id="status")
 
-        yield Container(id="vpn_container")
+        yield VerticalScroll(id="vpn_container")
         yield RichLog(id="log")
         yield Button("GO Back", id="back")
 
@@ -101,6 +101,7 @@ class VPNScreen(Screen):
             password = decrypt_password(profile.get("password"))
             group = profile.get("group", "")
             passcode = profile.get("passcode", "")
+            accept = profile.get("accept","y")
 
             if not server or not username:
                 raise ValueError("Profile is missing required server or username")
@@ -122,7 +123,7 @@ class VPNScreen(Screen):
             )
 
             self.app.vpn_process = process
-            input_data = f"{group}\n{username}\n{password or ''}\n{passcode or ''}\n"
+            input_data = f"{group}\n{username}\n{password or ''}\n{passcode}\n{accept}\n"
             process.stdin.write(input_data)
             process.stdin.flush()
             process.stdin.close()

@@ -79,7 +79,7 @@ class TerminalOS(App):
             except Exception:
                 pass
 
-        self.vpn_status = "disconnected"
+        self.vpn_status = "unbinded"
 
 
     def on_shutdown_request(self):

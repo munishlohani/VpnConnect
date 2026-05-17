@@ -57,7 +57,7 @@ def save_config(cfg):
 class StatusIndicator(Static):
 
 
-    def __init__(self, status="DISCONNECTED", **kwargs):
+    def __init__(self, status="unbinded", **kwargs):
         super().__init__(status, **kwargs)
         
     def set_disconnected(self):
