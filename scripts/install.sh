@@ -378,19 +378,6 @@ setup_venv() {
         return 0
     fi
 
-    if [ "$DISTRO" = "termux" ]; then
-        log_info "Creating virtual environment with Termux Python..."
-
-        if [ -d ".venv" ]; then
-            log_info "Virtual environment already exists, recreating..."
-            rm -rf .venv
-        fi
-
-        "$PYTHON_PATH" -m venv .venv
-        log_success "Virtual environment ready"
-        return 0
-    fi
-
     log_info "Creating virtual environment..."
 
     if [ -d ".venv" ]; then
@@ -398,8 +385,13 @@ setup_venv() {
         rm -rf .venv
     fi
 
-    # uv creates the venv and pins the Python version in one step
-    $UV_CMD venv .venv --python "$PYTHON_VERSION"
+    if [ "$DISTRO" = "termux" ]; then
+        # Termux doesn't have uv, use python -m venv
+        "$PYTHON_PATH" -m venv .venv
+    else
+        # Use uv venv for all other systems
+        $UV_CMD venv .venv
+    fi
 
     log_success "Virtual environment created"
 }
