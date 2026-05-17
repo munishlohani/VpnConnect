@@ -427,16 +427,14 @@ setup_venv() {
 install_deps() {
     log_info "Installing VPNConnect and dependencies..."
 
-    # Use uv to install the project as a tool
     if [ "$DISTRO" = "termux" ]; then
-        # Termux doesn't have uv, use pip directly
-        log_info "Installing with pip..."
+        # Termux doesn't have uv, use pip in venv
         . .venv/bin/activate
         pip install -e . >/dev/null 2>&1
         deactivate
     else
         # Use uv tool install
-        $UV_CMD tool install . --with-editable
+        $UV_CMD tool install .
     fi
 
     log_success "Dependencies installed"
@@ -487,6 +485,9 @@ print_next_steps() {
 
 main() {
     print_banner
+
+    # Detect OS first
+    detect_os
 
     # Check if running on Windows
     if [ "$OS" = "windows" ]; then
