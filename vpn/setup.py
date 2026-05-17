@@ -6,6 +6,7 @@ from config import load_config, save_config, encrypt_password
 class AddProfile(Screen):
 
     def compose(self):
+        yield Button("X", id="exit", classes="exit-button")
         yield Input(placeholder="Profile name", id="name")
         yield Input(placeholder="Server", id="server")
         yield Input(placeholder="Username", id="username")
@@ -17,6 +18,10 @@ class AddProfile(Screen):
         yield Static("", id="error")
 
     def on_button_pressed(self, event):
+        if event.button.id == "exit":
+            self.app.exit()
+            return
+
         if event.button.id != "save":
             return
 

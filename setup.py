@@ -7,6 +7,7 @@ from config import load_config
 class Setup(Screen):
 
     def compose(self):
+        yield Button("X", id="exit", classes="exit-button")
         yield Static("VPN Setup", id="title")
         yield Button("Add Profile", id="add")
         yield Button("Back", id="back")
@@ -51,3 +52,6 @@ class Setup(Screen):
         elif event.button.id == "back":
             from home import Home
             self.app.switch_screen(Home())
+
+        elif event.button.id == "exit":
+            self.app.exit()

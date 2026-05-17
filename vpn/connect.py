@@ -1,6 +1,6 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
-from textual.containers import Container
+from textual.containers import Container, Horizontal, Vertical
 import subprocess
 from config import load_config, decrypt_password
 from textual.widgets import RichLog
@@ -20,8 +20,9 @@ except Exception:
 class VPNScreen(Screen):
 
     def compose(self):
-        yield Static("Connect To VPN", id="title")
-
+        yield Static(content="Connect To VPN", id="title")
+        yield Button("X", id="exit", classes="exit-button")
+    
         yield StatusIndicator(self.app.vpn_status, id="status")
 
         yield Container(id="vpn_container")
@@ -46,6 +47,9 @@ class VPNScreen(Screen):
         if event.button.id == "disconnect":
             self._disconnect()
 
+        if event.button.id == "exit":
+            self.app.exit()
+
     def on_mount(self):
         self.load_profiles()
 
@@ -66,7 +70,7 @@ class VPNScreen(Screen):
             for name, data in profiles.items():
                 container.mount(
                     Button(
-                        f"{name} → {data['server']}",
+                        f"{name} ==> {data['server']} ({data['username']})",
                         id=f"connect_{name}"
                     )
                 )
@@ -75,6 +79,7 @@ class VPNScreen(Screen):
                 Button(
                     "Disconnect",
                     id="disconnect",
+                    variant="warning"
                 )
             )
     @work(thread=True)

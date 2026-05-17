@@ -12,3 +12,6 @@ dependencies = [
     "cryptography>=41.0.0",
     "pexpect>=4.8.0",
 ]
+
+[project.scripts]
+connect-vpn = "main:main"

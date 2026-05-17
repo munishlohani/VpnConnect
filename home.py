@@ -1,9 +1,11 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
+from textual.containers import Vertical
 from config import load_config, StatusIndicator
 
 
 class Home(Screen):
+
 
 
     def compose(self):
@@ -12,7 +14,12 @@ class Home(Screen):
         cfg = load_config() or {}
         profiles = cfg.get("vpn", {}).get("profiles", {})
 
-        yield Static("VPNConnect", id="title")
+        yield Vertical(
+         Button("X", id="exit", classes="exit-button"),
+         Static("VPNConnect", id="title")
+
+        )
+
         yield StatusIndicator(f"Status: {self.app.vpn_status}", id="status")
         if not profiles:
             yield Static("VPN: No profiles configured", id="no-profiles")
@@ -20,10 +27,11 @@ class Home(Screen):
         yield Static("Options", id="section-title")
 
 
+
         if "connected" not in self.app.vpn_status:
             yield Button("Connect VPN", id="connect")
         else:
-            yield Button("Disconnect",id="disconnect")
+            yield Button("Disconnect", id="disconnect")
         yield Button("Setup / Profiles", id="setup")
         yield Button("Refresh", id="refresh")
 
@@ -52,6 +60,9 @@ class Home(Screen):
             self.app.disconnect_vpn()
             from home import Home
             self.app.switch_screen(Home())
+
+        if event.button.id == "exit":
+            self.app.exit()
 
     def get_status(self):
         return self.query_one("#status", StatusIndicator)
