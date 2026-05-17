@@ -6,8 +6,11 @@ from textual.widgets import Static
 
 from cryptography.fernet import Fernet
 
-CONFIG_PATH = "config.yaml"
-KEY_PATH = ".vault_key"
+
+ROOT_DIR = "~/.connectvpn"
+
+CONFIG_PATH = os.path.join(ROOT_DIR,"config.yaml")
+KEY_PATH = os.path.join(ROOT_DIR,".vault_key")
 
 
 def _get_key() -> bytes:
