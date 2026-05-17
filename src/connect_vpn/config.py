@@ -15,6 +15,9 @@ KEY_PATH = os.path.join(ROOT_DIR,".vault_key")
 
 def _get_key() -> bytes:
     """Return existing key or generate a new one stored at KEY_PATH."""
+
+    os.makedirs(ROOT_DIR, exist_ok=True)
+    
     if os.path.exists(KEY_PATH):
         with open(KEY_PATH, "rb") as f:
             return f.read()
