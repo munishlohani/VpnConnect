@@ -10,61 +10,20 @@ A terminal-based VPN connector for Cisco AnyConnect-compatible VPN clients. This
 - Clean disconnect handling and exit button support
 - UV-managed environment and script entrypoint
 
-## Prerequisites
+## QuickStart
 
-- [uv](https://uvpkg.com/) installed
-- Cisco AnyConnect CLI installed at `/opt/cisco/secureclient/bin/vpn`
+>[!IMPORTANT]
+The current version does not support Windows.
 
-## Install with UV
+**Mac & Linux**
+```bash
+curl -sSL https://raw.githubusercontent.com/munishlohani/VpnConnect/main/scripts/install.sh | bash
+```
 
-From the project root:
+The installation handles everything: uv, python, git
+
+### After Installation
 
 ```bash
-uv install
+connect-vpn #start the TUI
 ```
-
-This will create a project virtual environment and install dependencies from `pyproject.toml`.
-
-To install the TUI as a local UV tool, run:
-
-```bash
-uv tool install .
-```
-
-## Run the app
-
-Use the UV script entrypoint:
-
-```bash
-uv run connect-vpn
-```
-
-If the script entrypoint is not available for any reason, you can also run the app directly through UV’s Python environment:
-
-```bash
-uv run python src/connect_vpn/main.py
-```
-
-
-## Configuration
-
-The app stores configuration in a `config.yaml` file located in the project root. Profiles are saved under the `vpn.profiles` key and passwords are encrypted automatically.
-
-Example profile format:
-
-```yaml
-vpn:
-  profiles:
-    work:
-      server: vpn.example.com
-      username: user@example.com
-      password: <encrypted-token>
-      group: 1
-      passcode: 1
-```
-
-## Notes
-
-- The project is configured as a UV package with the `connect-vpn` script entrypoint.
-- If you change the VPN binary path, update `VPN_BIN` in `src/connect_vpn/app.py`.
-- Keep `.vault_key` secure, since it encrypts stored passwords.
